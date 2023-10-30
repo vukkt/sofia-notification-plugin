@@ -3,4 +3,3 @@
 .DS_Store
 src/**/*.DS_Store
 # Ignore the specific file
-betterbactory-fiware-persistence.iml
