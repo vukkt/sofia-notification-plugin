@@ -10,7 +10,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 public class NotificationDto {
-    private String id;
+    private String title;
     private String message;
     private String asset_id;
+
 }

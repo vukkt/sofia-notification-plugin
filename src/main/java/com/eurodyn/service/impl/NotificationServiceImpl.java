@@ -16,9 +16,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Transactional
     @Override
-    public void saveNotification(String id, String value, String assetId) {
-        Query query = entityManager.createNativeQuery("INSERT INTO notification (id, message,asset_id) VALUES (:id, :value,:asset_id)");
-        query.setParameter("id", id);
+    public void saveNotification(String title, String value, String assetId) {
+        Query query = entityManager.createNativeQuery("INSERT INTO notification (title, message,asset_id) VALUES (:title, :value,:asset_id)");
+        query.setParameter("title", title);
         query.setParameter("value", value);
         query.setParameter("asset_id", assetId);
         query.executeUpdate();

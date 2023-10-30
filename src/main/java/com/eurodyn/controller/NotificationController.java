@@ -18,10 +18,10 @@ public class NotificationController {
     @PostMapping("/notification")
     public ResponseEntity<String> createNotification(@RequestBody NotificationDto notificationDto) {
         try {
-            String id = notificationDto.getId();
+            String title = notificationDto.getTitle();
             String message = notificationDto.getMessage();
             String asset_id = notificationDto.getAsset_id();
-            notificationService.saveNotification(id, message, asset_id);
+            notificationService.saveNotification(title, message, asset_id);
             return ResponseEntity.ok("Notification created succesfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
