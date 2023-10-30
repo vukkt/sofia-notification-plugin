@@ -40,16 +40,24 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     public String retrieveMessage(NotificationDto notificationDto) {
-
-        String sql = "SELECT GROUP_CONCAT(CONCAT('<i class=\"fa-solid fa-circle-notch\"></i> ', s.name) SEPARATOR '<br>') AS message " +
+        String id = UUID.randomUUID().toString();
+        Query query = entityManager.createNativeQuery("SELECT GROUP_CONCAT(CONCAT('<i class=\"fa-solid fa-circle-notch\"></i> ', s.name) SEPARATOR '<br>') AS message " +
                 "FROM asset a " +
                 "INNER JOIN scenario s ON s.asset_id = a.id " +
                 "INNER JOIN threat t ON s.threat_id = t.id " +
                 "WHERE a.id = :asset_id " +
-                "AND t.threat_category_id = :threat_category_id";
+                "AND t.threat_category_id = :threat_category_id");
+//        String sql = "SELECT GROUP_CONCAT(CONCAT('<i class=\"fa-solid fa-circle-notch\"></i> ', s.name) SEPARATOR '<br>') AS message " +
+//                "FROM asset a " +
+//                "INNER JOIN scenario s ON s.asset_id = a.id " +
+//                "INNER JOIN threat t ON s.threat_id = t.id " +
+//                "WHERE a.id = :asset_id " +
+//                "AND t.threat_category_id = :threat_category_id";
+        query.setParameter("asset_id", notificationDto.getAsset_id());
+        query.setParameter("threat_category_id", notificationDto.getThreat_category_id());
 
-
-        return sql;
+        String message = (String) query.getSingleResult();
+        return message;
     }
 }
 
