@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+import java.util.Map;
+
 @RestController
 public class NotificationController {
 
@@ -16,16 +19,16 @@ public class NotificationController {
     private NotificationServiceImpl notificationService;
 
     @PostMapping("/notification")
-    public ResponseEntity<String> createNotification(@RequestBody NotificationDto notificationDto) {
+    public ResponseEntity<Map<String,String>> createNotification(@RequestBody NotificationDto notificationDto) {
         try {
-            String title = notificationDto.getTitle();
-            String message = notificationDto.getMessage();
-            String asset_id = notificationDto.getAsset_id();
-            notificationService.saveNotification(title, message, asset_id);
-            return ResponseEntity.ok("Notification created succesfully");
+            String message = notificationService.retrieveMessage(notificationDto);
+            notificationDto.setMessage(message);
+
+            String id = notificationService.saveNotification(notificationDto);
+            return ResponseEntity.ok(Collections.singletonMap("notification_id", id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(("failed to create notification: " + e.getMessage()));
+                    .body(Collections.singletonMap("error", e.getMessage()));
         }
     }
 }

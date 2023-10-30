@@ -1,8 +1,9 @@
 package com.eurodyn.service;
 
+import com.eurodyn.dto.NotificationDto;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface NotificationService {
-    void saveNotification(String title, String value, String asset_id);
+    String saveNotification(NotificationDto notificationDto);
 }

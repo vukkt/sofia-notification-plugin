@@ -13,5 +13,5 @@ public class NotificationDto {
     private String title;
     private String message;
     private String asset_id;
-
+    private String threat_category_id;
 }
