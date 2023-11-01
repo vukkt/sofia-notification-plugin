@@ -25,6 +25,23 @@ public class AssetServiceImpl implements AssetService {
     @Autowired
     private EntityManager entityManager;
 
+//    @Transactional
+//    public String updateAssetImagesAndSave(Map<String, Map<String, Object>> parameters) {
+//        Map<String, Object> asset = parameters.get("asset");
+//        Map<String, Object> assetEntities = (Map<String, Object>) asset.get("sub-entities");
+//        Map<String, Object> assetImage = (Map<String, Object>) assetEntities.get("asset_image");
+//
+//        for (Map.Entry<String, Object> assetImageLine : assetImage.entrySet()) {
+//            Map<String, Object> assetImageFields = (Map<String, Object>) assetImageLine.getValue();
+//
+//            String imageBase64 = (String) assetImageFields.get("image");
+//
+//            String minimizedImage = ImageUtils.minimizeImage(imageBase64, newImageWidth);
+//
+//        }
+//
+//    }
+
     @Transactional
     public ResponseEntity<Map<String, String>> createAssetImage(AssetDto assetDto) throws IOException {
         try {
@@ -38,8 +55,13 @@ public class AssetServiceImpl implements AssetService {
 
             String minimizedImage = ImageUtils.minimizeImage(imageBase64, newImageWidth);
 
-            String imageId = this.saveAssetImage(assetDto.getAsset_id(), "data:" + fileType + ";base64," + minimizedImage, fileName, fileType);
-            this.saveAssetOriginalImage(imageId, "data:" + fileType + ";base64," + imageBase64, fileName, fileType);
+            String imageId = this.saveAssetImage(assetDto.getAsset_id(),
+                    "data:" + fileType + ";base64," + minimizedImage,
+                    "data:" + fileType + ";base64," + imageBase64,
+                    fileName,
+                    fileType);
+
+         //   this.saveAssetOriginalImage(imageId, "data:" + fileType + ";base64," + imageBase64, fileName, fileType);
 
             return ResponseEntity.ok(Collections.singletonMap("asset_image_id", imageId));
         } catch (Exception e) {
@@ -49,10 +71,15 @@ public class AssetServiceImpl implements AssetService {
 
     @Transactional
     @Override
-    public String saveAssetImage(String asset_id, String value,String filename,String fileType) {
-        Query query = entityManager.createNativeQuery("INSERT INTO asset_image (asset_id, image, filename, filetype) VALUES (:asset_id, :value, :filename, :filetype)");
+    public String saveAssetImage(String asset_id,
+                                 String image,
+                                 String originalImage,
+                                 String filename,
+                                 String fileType) {
+        Query query = entityManager.createNativeQuery("INSERT INTO asset_image (asset_id, image, original_image, filename, filetype) VALUES (:asset_id, :image, :original_image, :filename, :filetype)");
         query.setParameter("asset_id", asset_id);
-        query.setParameter("value", value);
+        query.setParameter("image", image);
+        query.setParameter("original_image", originalImage);
         query.setParameter("filename", filename);
         query.setParameter("filetype", fileType);
         query.executeUpdate();
@@ -60,17 +87,16 @@ public class AssetServiceImpl implements AssetService {
         return entityManager.createNativeQuery("SELECT LAST_INSERT_ID()").getSingleResult().toString();
     }
 
-    @Transactional
-    @Override
-    public void saveAssetOriginalImage(String id, String value,String filename,String fileType) {
-        Query query = entityManager.createNativeQuery("INSERT INTO asset_original_image (asset_image_id, image, filename, filetype) VALUES (:asset_image_id, :value, :filename, :filetype)");
-        query.setParameter("asset_image_id", id);
-        query.setParameter("value", value);
-        query.setParameter("filename", filename);
-        query.setParameter("filetype", fileType);
-        query.executeUpdate();
-    }
-
+//    @Transactional
+//    @Override
+//    public void saveAssetOriginalImage(String id, String value,String filename,String fileType) {
+//        Query query = entityManager.createNativeQuery("INSERT INTO asset_original_image (asset_image_id, image, filename, filetype) VALUES (:asset_image_id, :value, :filename, :filetype)");
+//        query.setParameter("asset_image_id", id);
+//        query.setParameter("value", value);
+//        query.setParameter("filename", filename);
+//        query.setParameter("filetype", fileType);
+//        query.executeUpdate();
+//    }
 
 }
 

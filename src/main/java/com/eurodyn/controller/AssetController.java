@@ -5,9 +5,7 @@ import com.eurodyn.service.impl.AssetServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -15,6 +13,7 @@ import java.util.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class AssetController {
 
     static final List<String> allowedTypes = Arrays.asList("image/jpeg", "image/jpg", "image/png");
@@ -22,8 +21,8 @@ public class AssetController {
     @Autowired
     private AssetServiceImpl assetService;
 
-    @PostMapping(path = "asset",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<Map<String,String>> createAssetImage2(@ModelAttribute AssetDto assetDto) throws IOException {
+    @PostMapping(path = "asset-image",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<Map<String,String>> createAssetImage(@ModelAttribute AssetDto assetDto) throws IOException {
 
         if (assetDto.getImage().isEmpty()) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("error","empty file"));
@@ -35,6 +34,16 @@ public class AssetController {
 
        return assetService.createAssetImage(assetDto);
     }
+
+//    @PostMapping(path = "asset")
+//    public String createAsset(@RequestParam("id") String formId,
+//                              @RequestBody Map<String, Map<String, Object>> parameters){
+//
+//        return assetService.updateAssetImagesAndSave(parameters);
+//
+//       // String result = "ok";
+//       // return result;
+//    }
 
 //    @PostMapping("/test")
 //    public ResponseEntity<Map<String,String>> createAssetImage(@RequestBody AssetDto assetDto) {
