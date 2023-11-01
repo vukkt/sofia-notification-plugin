@@ -2,7 +2,7 @@ version: "3.5"
 services:
 
   # Sofia Backend application 
-  sofia-plugin:
+  sofia-notification-plugin:
     environment:
       - JAVA_OPTS=-Xms256m -Xmx512m
     build:
@@ -12,19 +12,19 @@ services:
         DB_PORT: 3306
         DB_NAME: sofia
         DB_USERNAME: root
-        DB_PASSWORD: hT7$Wn@P5*rL#mD9!
+        DB_PASSWORD: root
         SOFIA_URI: http://sofia-backend:15502/api
       dockerfile: Dockerfile
-    image: sofia-plugin
-    container_name: sofia-plugin
+    image: sofia-notification-plugin
+    container_name: sofia-notification-plugin
     ports:
       - "15555:15555"
     restart: unless-stopped
     networks:
-      - sofia_network 
+      - bd4nrg 
       
 networks:
-  sofia_network:
+  bd4nrg:
     external: true
-    name: sofia_network
+    name: bd4nrg
     driver: bridge
