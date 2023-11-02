@@ -1,8 +1,8 @@
 FROM adoptopenjdk/openjdk11:jre11u-centos-nightly
 
-EXPOSE 15502
+EXPOSE 15555
 
-ARG JAR_FILE=sofia-plugin-1.0.0-SNAPSHOT.jar
+ARG JAR_FILE=sofia-notification-plugin-1.0.0-SNAPSHOT.jar
 ADD ${JAR_FILE} app.jar
 
 ARG DB_IP
