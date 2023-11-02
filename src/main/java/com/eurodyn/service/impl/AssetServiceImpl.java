@@ -59,7 +59,8 @@ public class AssetServiceImpl implements AssetService {
                     "data:" + fileType + ";base64," + minimizedImage,
                     "data:" + fileType + ";base64," + imageBase64,
                     fileName,
-                    fileType);
+                    fileType,
+                    assetDto.getDescription());
 
          //   this.saveAssetOriginalImage(imageId, "data:" + fileType + ";base64," + imageBase64, fileName, fileType);
 
@@ -75,13 +76,16 @@ public class AssetServiceImpl implements AssetService {
                                  String image,
                                  String originalImage,
                                  String filename,
-                                 String fileType) {
-        Query query = entityManager.createNativeQuery("INSERT INTO asset_image (asset_id, image, original_image, filename, filetype) VALUES (:asset_id, :image, :original_image, :filename, :filetype)");
+                                 String fileType,
+                                 String description) {
+        Query query = entityManager.createNativeQuery("INSERT INTO asset_image (asset_id, image, original_image, filename, filetype, description) VALUES (:asset_id, :image, :original_image, :filename, :filetype, :description)");
         query.setParameter("asset_id", asset_id);
         query.setParameter("image", image);
         query.setParameter("original_image", originalImage);
         query.setParameter("filename", filename);
         query.setParameter("filetype", fileType);
+        query.setParameter("description", description);
+
         query.executeUpdate();
 
         return entityManager.createNativeQuery("SELECT LAST_INSERT_ID()").getSingleResult().toString();

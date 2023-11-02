@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @SuperBuilder
 public class AssetDto {
     private String asset_id;
-    private String image_base64;
+//    private String image_base64;
     private MultipartFile image;
+    private String description;
 }
