@@ -22,7 +22,7 @@ public class NotificationController {
     public ResponseEntity<Map<String,String>> createNotification(@RequestBody NotificationDto notificationDto) {
         try {
             String message = notificationService.retrieveMessage(notificationDto);
-            notificationDto.setMessage(message);
+//            notificationDto.setDescription(message);
 
             String id = notificationService.saveNotification(notificationDto);
             return ResponseEntity.ok(Collections.singletonMap("notification_id", id));
