@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class NotificationDto {
     private String title;
-    private String message;
+    private String description;
     private String asset_id;
     private String threat_category_id;
 }
