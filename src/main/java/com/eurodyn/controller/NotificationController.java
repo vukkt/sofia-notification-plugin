@@ -1,12 +1,14 @@
 package com.eurodyn.controller;
 
 import com.eurodyn.dto.NotificationDto;
+import com.eurodyn.resttemplates.SofiaRestTemplate;
 import com.eurodyn.service.impl.NotificationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
@@ -18,8 +20,15 @@ public class NotificationController {
     @Autowired
     private NotificationServiceImpl notificationService;
 
+    @Autowired
+    private SofiaRestTemplate sofiaRestTemplate;
+
     @PostMapping("/notification")
-    public ResponseEntity<Map<String,String>> createNotification(@RequestBody NotificationDto notificationDto) {
+    public ResponseEntity<Map<String,String>> createNotification(@RequestBody NotificationDto notificationDto,
+                                                                 @RequestHeader Map<String, String> headers) {
+
+        sofiaRestTemplate.tokenValidationCheck(headers.get("authorization"));
+
         try {
             String message = notificationService.retrieveMessage(notificationDto);
             notificationDto.setDescription(message);

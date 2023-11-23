@@ -1,6 +1,7 @@
 package com.eurodyn.service.impl;
 
 import com.eurodyn.dto.AssetDto;
+import com.eurodyn.resttemplates.SofiaRestTemplate;
 import com.eurodyn.service.AssetService;
 import com.eurodyn.utils.ImageUtils;
 import org.apache.commons.io.IOUtils;
@@ -25,25 +26,15 @@ public class AssetServiceImpl implements AssetService {
     @Autowired
     private EntityManager entityManager;
 
-//    @Transactional
-//    public String updateAssetImagesAndSave(Map<String, Map<String, Object>> parameters) {
-//        Map<String, Object> asset = parameters.get("asset");
-//        Map<String, Object> assetEntities = (Map<String, Object>) asset.get("sub-entities");
-//        Map<String, Object> assetImage = (Map<String, Object>) assetEntities.get("asset_image");
-//
-//        for (Map.Entry<String, Object> assetImageLine : assetImage.entrySet()) {
-//            Map<String, Object> assetImageFields = (Map<String, Object>) assetImageLine.getValue();
-//
-//            String imageBase64 = (String) assetImageFields.get("image");
-//
-//            String minimizedImage = ImageUtils.minimizeImage(imageBase64, newImageWidth);
-//
-//        }
-//
-//    }
+    @Autowired
+    private SofiaRestTemplate sofiaRestTemplate;
+
 
     @Transactional
-    public ResponseEntity<Map<String, String>> createAssetImage(AssetDto assetDto) throws IOException {
+    public ResponseEntity<Map<String, String>> createAssetImage(AssetDto assetDto, Map<String, String> headers) throws IOException {
+
+        sofiaRestTemplate.tokenValidationCheck(headers.get("authorization"));
+
         try {
             String fileType = assetDto.getImage().getContentType();
 
@@ -61,8 +52,6 @@ public class AssetServiceImpl implements AssetService {
                     fileName,
                     fileType,
                     assetDto.getDescription());
-
-         //   this.saveAssetOriginalImage(imageId, "data:" + fileType + ";base64," + imageBase64, fileName, fileType);
 
             return ResponseEntity.ok(Collections.singletonMap("asset_image_id", imageId));
         } catch (Exception e) {
