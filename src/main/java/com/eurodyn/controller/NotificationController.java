@@ -31,7 +31,7 @@ public class NotificationController {
 
         try {
             String message = notificationService.retrieveMessage(notificationDto);
-            notificationDto.setDescription(message);
+            notificationDto.setMessage(message);
 
             String id = notificationService.saveNotification(notificationDto);
             return ResponseEntity.ok(Collections.singletonMap("notification_id", id));

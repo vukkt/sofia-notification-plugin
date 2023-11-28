@@ -20,11 +20,12 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public String saveNotification(NotificationDto notificationDto) {
         String id = UUID.randomUUID().toString();
-        Query query = entityManager.createNativeQuery("INSERT INTO notification (id, title, description,asset_id, receiver_id, threat_category_id) " +
+        Query query = entityManager.createNativeQuery("INSERT INTO notification (id, title, description, message, asset_id, receiver_id, threat_category_id) " +
                 "VALUES (" +
                 ":id, " +
                 ":title, " +
                 ":description, " +
+                ":message, " +
                 ":asset_id, " +
                 " (SELECT created_by from asset WHERE id = :asset_id), " +
                 ":threat_category_id" +
@@ -33,6 +34,7 @@ public class NotificationServiceImpl implements NotificationService {
         query.setParameter("id",id );
         query.setParameter("title", notificationDto.getTitle());
         query.setParameter("description", notificationDto.getDescription());
+        query.setParameter("message", notificationDto.getMessage());
         query.setParameter("asset_id", notificationDto.getAsset_id());
         query.setParameter("threat_category_id", notificationDto.getThreat_category_id());
         query.executeUpdate();
